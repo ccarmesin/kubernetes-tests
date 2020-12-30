@@ -1,0 +1,18 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: {{ .Values.kubernetesTests.appName }}-service
+  annotations:
+    kubernetes.io/ingress.class: "traefik"
+    traefik.ingress.kubernetes.io/frontend-entry-points: http,https
+    #traefik.ingress.kubernetes.io/redirect-entry-point: https
+    #traefik.ingress.kubernetes.io/redirect-permanent: "true"
+spec:
+  rules:
+  - host: {{ .Values.domain }}
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: {{ .Values.kubernetesTests.appName }}-service
+          servicePort: 80   
