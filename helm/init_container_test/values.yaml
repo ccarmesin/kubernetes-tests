@@ -1,0 +1,4 @@
+# Default values for init_container_test.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+# No values necessary because this is a test project and all values are harcoded

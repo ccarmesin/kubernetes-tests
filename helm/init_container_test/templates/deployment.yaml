@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo-deploy
+  namespace: default
+  labels:
+    app: demo-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: demo-app
+  template:
+    metadata:
+      labels:
+        app: demo-app
+    spec:
+      initContainers:
+        - name: init-container
+          image: postgres
+          env:
+            - name: PGHOST
+              value: "carmesin.me"
+            - name: PGPORT
+              value: "5432"
+            - name: PGUSER
+              value: "<PASSWORD_FROM_SECRET>"
+            - name: PGPASSWORD
+              value: "<PASSWORD_FROM_SECRET>"
+          command: ["psql", "-c", "CREATE USER new_user WITH PASSWORD '<NEW_PASSWORD_FROM_SECRET>';", "postgres"]
+      containers:
+        - name: kubernetes-tests
+          image: kubernetes-tests:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 5000
